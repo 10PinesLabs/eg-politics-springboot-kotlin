@@ -2,19 +2,12 @@ package org.uqbar.politics.config
 
 import org.keycloak.Config
 import org.keycloak.representations.idm.RealmRepresentation
-
 import org.keycloak.util.JsonSerialization
-
 import org.springframework.core.io.ClassPathResource
-
 import org.keycloak.services.managers.RealmManager
-
 import org.keycloak.services.managers.ApplianceBootstrap
-
 import java.util.NoSuchElementException
-
 import org.keycloak.services.util.JsonConfigProviderFactory
-
 import org.keycloak.services.resources.KeycloakApplication
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -25,13 +18,13 @@ class RegularJsonConfigProviderFactory : JsonConfigProviderFactory()
 
 class EmbeddedKeycloakApplication : KeycloakApplication() {
     override fun loadConfig() {
-//        val factory: JsonConfigProviderFactory = RegularJsonConfigProviderFactory()
-//        Config.init(factory.create()
-//            .orElseThrow {
-//                NoSuchElementException(
-//                    "No value present"
-//                )
-//            })
+        val factory: JsonConfigProviderFactory = RegularJsonConfigProviderFactory()
+        Config.init(factory.create()
+            .orElseThrow {
+                NoSuchElementException(
+                    "No value present"
+                )
+            })
     }
 
     private fun createMasterRealmAdminUser() {
@@ -49,19 +42,14 @@ class EmbeddedKeycloakApplication : KeycloakApplication() {
         session.close()
     }
 
-    private fun createPoliticsRealm() {
+    private fun createBaeldungRealm() {
         val session = getSessionFactory().create()
         try {
             session.transactionManager.begin()
             val manager = RealmManager(session)
-            val lessonRealmImportFile: Resource = ClassPathResource(
-                keycloakServerProperties!!.realmImportFile
-            )
+            val lessonRealmImportFile: Resource = ClassPathResource(keycloakServerProperties!!.realmImportFile)
             manager.importRealm(
-                JsonSerialization.readValue(
-                    lessonRealmImportFile.getInputStream(),
-                    RealmRepresentation::class.java
-                )
+                JsonSerialization.readValue(lessonRealmImportFile.inputStream, RealmRepresentation::class.java)
             )
             session.transactionManager.commit()
         } catch (ex: Exception) {
@@ -77,7 +65,7 @@ class EmbeddedKeycloakApplication : KeycloakApplication() {
     }
 
     init {
-//        createMasterRealmAdminUser()
-//        createPoliticsRealm()
+        createMasterRealmAdminUser()
+        createBaeldungRealm()
     }
 }

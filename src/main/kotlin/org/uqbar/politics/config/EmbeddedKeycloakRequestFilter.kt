@@ -2,19 +2,18 @@ package org.uqbar.politics.config
 
 import org.keycloak.common.ClientConnection
 import org.keycloak.models.KeycloakSession
-import org.keycloak.services.filters.AbstractRequestFilter
+import javax.servlet.http.HttpServletRequest
 import java.io.UnsupportedEncodingException
+import javax.servlet.FilterChain
+import javax.servlet.ServletResponse
+import javax.servlet.ServletRequest
+import org.keycloak.services.filters.AbstractRequestFilter
 import java.lang.Exception
 import javax.servlet.Filter
-import javax.servlet.FilterChain
-import javax.servlet.ServletRequest
-import javax.servlet.ServletResponse
-import javax.servlet.http.HttpServletRequest
-
 
 class EmbeddedKeycloakRequestFilter : AbstractRequestFilter(), Filter {
     @Throws(UnsupportedEncodingException::class)
-    override fun doFilter(servletRequest: ServletRequest, servletResponse: ServletResponse, filterChain: FilterChain) {
+    override fun doFilter(servletRequest: ServletRequest, servletResponse: ServletResponse?, filterChain: FilterChain) {
         servletRequest.characterEncoding = "UTF-8"
         val clientConnection = createConnection(servletRequest as HttpServletRequest)
         filter(clientConnection) { session: KeycloakSession? ->

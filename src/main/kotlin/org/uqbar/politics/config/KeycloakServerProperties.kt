@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 @ConfigurationProperties(prefix = "keycloak.server")
 class KeycloakServerProperties {
     var contextPath = "/auth"
-    var realmImportFile = "politics-realm.json"
+    var realmImportFile = "baeldung-realm.json"
     var adminUser = AdminUser()
 
     // getters and setters

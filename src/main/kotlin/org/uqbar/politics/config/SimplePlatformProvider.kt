@@ -2,7 +2,7 @@ package org.uqbar.politics.config
 
 import org.keycloak.platform.PlatformProvider
 import org.keycloak.services.ServicesLogger
-
+import kotlin.system.exitProcess
 
 class SimplePlatformProvider : PlatformProvider {
     var shutdownHook: Runnable? = null
@@ -22,7 +22,7 @@ class SimplePlatformProvider : PlatformProvider {
     private fun exit(status: Int) {
         object : Thread() {
             override fun run() {
-                System.exit(status)
+                exitProcess(status)
             }
         }.start()
     }

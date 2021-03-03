@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 ext {
-    set("infinispan.version", "11.0.4.Final")
+    set("infinispan.version", "10.1.8.Final")
 }
 
 plugins {
@@ -35,8 +35,8 @@ dependencies {
     implementation("io.springfox:springfox-boot-starter:3.0.0")
     implementation("io.springfox:springfox-swagger-ui:3.0.0")
     implementation("org.springframework.boot:spring-boot-devtools")
-    implementation("org.jboss.resteasy:resteasy-jackson2-provider:4.6.0.Final")
-    implementation("org.keycloak:keycloak-dependencies-server-all:12.0.4")
+    implementation("org.jboss.resteasy:resteasy-jackson2-provider:3.12.1.Final")
+    implementation("org.keycloak:keycloak-dependencies-server-all:11.0.2")
     runtimeOnly("com.h2database:h2")
     runtimeOnly("mysql:mysql-connector-java")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
