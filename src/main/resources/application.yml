@@ -12,3 +12,14 @@ spring:
     hibernate:
       format_sql: true
       ddl-auto: create-drop
+
+keycloak:
+  server:
+    contextPath: /auth
+    adminUser:
+      username: admin
+      password: admin
+    realmImportFile: politics-realm.json
+
+
+
