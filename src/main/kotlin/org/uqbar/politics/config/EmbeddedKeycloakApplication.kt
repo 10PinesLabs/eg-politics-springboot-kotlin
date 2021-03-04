@@ -21,9 +21,7 @@ class EmbeddedKeycloakApplication : KeycloakApplication() {
         val factory: JsonConfigProviderFactory = RegularJsonConfigProviderFactory()
         Config.init(factory.create()
             .orElseThrow {
-                NoSuchElementException(
-                    "No value present"
-                )
+                NoSuchElementException("No value present")
             })
     }
 
@@ -42,7 +40,7 @@ class EmbeddedKeycloakApplication : KeycloakApplication() {
         session.close()
     }
 
-    private fun createBaeldungRealm() {
+    private fun createPoliticsRealm() {
         val session = getSessionFactory().create()
         try {
             session.transactionManager.begin()
@@ -66,6 +64,6 @@ class EmbeddedKeycloakApplication : KeycloakApplication() {
 
     init {
         createMasterRealmAdminUser()
-        createBaeldungRealm()
+        createPoliticsRealm()
     }
 }

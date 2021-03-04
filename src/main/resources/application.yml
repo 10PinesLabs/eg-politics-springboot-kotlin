@@ -3,7 +3,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost/politics
     username: root
-    password: password
+    password:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
