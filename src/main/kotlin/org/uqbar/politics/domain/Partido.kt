@@ -16,13 +16,13 @@ import javax.persistence.*
 abstract class Partido {
 
     @Id @GeneratedValue
-    var id: Long? = null
+    open var id: Long? = null
 
     @Column(length=150)
-    lateinit var nombre: String
+    open lateinit var nombre: String
 
     @Column
-    var afiliados: Int = 0
+    open var afiliados: Int = 0
 
     open fun validar() {
         if (nombre.trim() == "") {
