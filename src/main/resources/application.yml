@@ -10,8 +10,8 @@ spring:
     open-in-view: false
     show-sql: true
     hibernate:
+      ddl-auto: update
       format_sql: true
-      ddl-auto: create-drop
 
 keycloak:
   server:
@@ -21,5 +21,7 @@ keycloak:
       password: admin
     realmImportFile: politics-realm.json
 
+server:
+  port: 8083
 
 
