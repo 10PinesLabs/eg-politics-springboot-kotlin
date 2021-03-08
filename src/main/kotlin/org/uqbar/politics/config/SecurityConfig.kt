@@ -3,14 +3,23 @@ package org.uqbar.politics.config
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import org.springframework.security.web.header.writers.StaticHeadersWriter
 
 @EnableWebSecurity
 class SecurityConfig : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
-        http.headers {
-            it.addHeaderWriter(StaticHeadersWriter("X-Frame-Options","SAMEORIGIN"))
-        }
+        http.csrf().disable(); // no queremos dejar desactivado csrf
+
+        http.authorizeRequests()
+            .antMatchers("/**")
+            .permitAll() // acá tengo permitAll porque keycloak se encarga de validar el acceso a la vista de admin
+                // después habría que cambiarlo para permitir paginas según roles
+            .and()
+            .headers {
+                it.frameOptions {
+                    it.sameOrigin()
+                }
+            }
+
     }
 }
