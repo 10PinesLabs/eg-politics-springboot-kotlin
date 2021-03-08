@@ -32,14 +32,26 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("io.springfox:springfox-boot-starter:3.0.0")
-    implementation("io.springfox:springfox-swagger-ui:3.0.0")
     implementation("org.springframework.boot:spring-boot-devtools")
     implementation("org.jboss.resteasy:resteasy-jackson2-provider:3.12.1.Final")
     implementation("org.keycloak:keycloak-dependencies-server-all:11.0.2")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+//    implementation("org.keycloak:keycloak-spring-security-adapter:11.0.2")
+    // Swagger
+    implementation("io.springfox:springfox-boot-starter:3.0.0")
+    implementation("io.springfox:springfox-swagger-ui:3.0.0")
+
     runtimeOnly("com.h2database:h2")
     runtimeOnly("mysql:mysql-connector-java")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+}
+
+val keycloakVersion = "11.0.2"
+
+dependencyManagement {
+    imports {
+        mavenBom("org.keycloak.bom:keycloak-adapter-bom:${keycloakVersion}")
+    }
 }
 
 tasks.withType<KotlinCompile> {

@@ -16,7 +16,7 @@ spring:
     open-in-view: false
     show-sql: true
     hibernate:
-      #            use-new-id-generator-mappings: false
+      # use-new-id-generator-mappings: false
       format_sql: true
       ddl-auto: create-drop
       pool_size: 50
