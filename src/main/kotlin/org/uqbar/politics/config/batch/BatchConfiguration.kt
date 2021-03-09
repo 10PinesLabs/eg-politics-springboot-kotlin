@@ -19,6 +19,7 @@ import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilde
 import org.springframework.batch.item.database.JdbcBatchItemWriter
 import javax.sql.DataSource
 import org.springframework.batch.core.launch.support.RunIdIncrementer
+import org.springframework.scheduling.annotation.Scheduled
 
 @Configuration
 @EnableBatchProcessing
