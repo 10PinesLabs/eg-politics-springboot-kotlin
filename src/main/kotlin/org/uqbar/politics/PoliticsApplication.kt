@@ -35,6 +35,6 @@ internal class ScheduledTasks {
     @Scheduled(fixedDelay = 10000, initialDelay = 10000)
     @Throws(Exception::class)
     fun runJob() {
-        jobLauncher.run(job, JobParameters(hashMapOf(Pair("time", JobParameter(System.currentTimeMillis())))))
+        jobLauncher.run(job, JobParameters(hashMapOf(Pair("file.input", JobParameter("src/main/resources/zonas.csv")), Pair("time", JobParameter(System.currentTimeMillis())))))
     }
 }

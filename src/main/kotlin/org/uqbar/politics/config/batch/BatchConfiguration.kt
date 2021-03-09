@@ -19,7 +19,6 @@ import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilde
 import org.springframework.batch.item.database.JdbcBatchItemWriter
 import javax.sql.DataSource
 import org.springframework.batch.core.launch.support.RunIdIncrementer
-import org.springframework.scheduling.annotation.Scheduled
 
 @Configuration
 @EnableBatchProcessing
@@ -31,11 +30,8 @@ class BatchConfiguration {
     @Autowired
     lateinit var stepBuilderFactory: StepBuilderFactory;
 
-    @Value("\${file.input}")
-    lateinit var fileInput: String;
-
     @Bean
-    fun reader(): FlatFileItemReader<Zona> {
+    fun reader(@Value("#{jobParameters['file.input']}") fileInput: String): FlatFileItemReader<Zona> {
         return FlatFileItemReaderBuilder<Zona>().name("zonasItemReader")
             .resource(ClassPathResource(fileInput))
             .delimited()
@@ -68,10 +64,10 @@ class BatchConfiguration {
     }
 
     @Bean
-    fun step1(writer: JdbcBatchItemWriter<Zona>): Step {
+    fun step1(reader: FlatFileItemReader<Zona>, writer: JdbcBatchItemWriter<Zona>): Step {
         return stepBuilderFactory["step1"]
             .chunk<Zona, Zona>(10)
-            .reader(reader())
+            .reader(reader)
             .processor(processor())
             .writer(writer)
             .build()

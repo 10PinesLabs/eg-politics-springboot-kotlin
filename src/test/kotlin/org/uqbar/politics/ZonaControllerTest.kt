@@ -9,9 +9,12 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.MediaType
+import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.uqbar.politics.domain.Zona
 import org.uqbar.politics.repository.ZonaRepository
 
@@ -41,6 +44,14 @@ class ZonaControllerTest {
         // los zonas no traen candidatos
         assertThrows<UninitializedPropertyAccessException> { zonas.first().candidates }
     }
+
+    /*@Test
+    @DisplayName("")
+    fun crearZonas() {
+        val zonasCsv = MockMultipartFile("zonas.csv", "LOMA HERMOSA\nSAN MARTIN".toByteArray())
+        val responseEntity = mockMvc.perform(MockMvcRequestBuilders.multipart("/zonas").file(zonasCsv)).andExpect(status().`is`(200))
+
+    }*/
 
     @Test
     @DisplayName("al traer el dato de una zona trae las personas candidatas también")
