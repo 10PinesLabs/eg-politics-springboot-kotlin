@@ -12,3 +12,10 @@ spring:
     hibernate:
       format_sql: true
       ddl-auto: create-drop
+
+  batch:
+    initialize-schema: ALWAYS
+
+file:
+  input: zonas.csv
+
