@@ -3,11 +3,7 @@ package org.uqbar.politics.config.batch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.batch.item.ItemProcessor
-import org.springframework.beans.factory.annotation.Autowired
-import org.uqbar.politics.domain.Candidate
 import org.uqbar.politics.domain.Zona
-import org.uqbar.politics.repository.CandidateRepository
-import java.lang.Exception
 
 class ZonaItemProcessor : ItemProcessor<Zona, Zona> {
 

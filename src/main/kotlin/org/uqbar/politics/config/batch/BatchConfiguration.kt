@@ -5,20 +5,25 @@ import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory
+import org.springframework.batch.core.configuration.annotation.StepScope
+import org.springframework.batch.core.launch.support.RunIdIncrementer
+import org.springframework.batch.item.data.RepositoryItemWriter
+import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder
+import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider
+import org.springframework.batch.item.database.JdbcBatchItemWriter
+import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder
+import org.springframework.batch.item.file.FlatFileItemReader
+import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder
+import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.Configuration
-import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper
-import org.springframework.core.io.ClassPathResource
-import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder
-import org.springframework.batch.item.file.FlatFileItemReader
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.core.io.ClassPathResource
 import org.uqbar.politics.domain.Zona
-import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider
-import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder
-import org.springframework.batch.item.database.JdbcBatchItemWriter
+import org.uqbar.politics.repository.ZonaRepository
 import javax.sql.DataSource
-import org.springframework.batch.core.launch.support.RunIdIncrementer
+
 
 @Configuration
 @EnableBatchProcessing
@@ -30,8 +35,12 @@ class BatchConfiguration {
     @Autowired
     lateinit var stepBuilderFactory: StepBuilderFactory;
 
+    @Autowired
+    lateinit var zonaRepository: ZonaRepository
+
+    @StepScope
     @Bean
-    fun reader(@Value("#{jobParameters['file.input']}") fileInput: String): FlatFileItemReader<Zona> {
+    fun zonasReader(@Value("#{jobParameters['file.input']}") fileInput: String): FlatFileItemReader<Zona> {
         return FlatFileItemReaderBuilder<Zona>().name("zonasItemReader")
             .resource(ClassPathResource(fileInput))
             .delimited()
@@ -44,28 +53,37 @@ class BatchConfiguration {
             .build()
     }
 
+//    @Bean
+//    fun zonasWriter(dataSource: DataSource): JdbcBatchItemWriter<Zona> {
+//        return JdbcBatchItemWriterBuilder<Zona>()
+//            .itemSqlParameterSourceProvider(BeanPropertyItemSqlParameterSourceProvider())
+//            .sql("INSERT INTO zona (descripcion) VALUES (:descripcion)")
+//            .dataSource(dataSource)
+//            .build()
+//    }
+
     @Bean
-    fun writer(dataSource: DataSource): JdbcBatchItemWriter<Zona> {
-        return JdbcBatchItemWriterBuilder<Zona>()
-            .itemSqlParameterSourceProvider(BeanPropertyItemSqlParameterSourceProvider())
-            .sql("INSERT INTO zona (descripcion) VALUES (:descripcion)")
-            .dataSource(dataSource)
+    fun zonasRepositoryWriter(): RepositoryItemWriter<Zona> {
+        return RepositoryItemWriterBuilder<Zona>()
+            .repository(zonaRepository)
+            .methodName("save")
             .build()
     }
 
     @Bean
-    fun importUserJob(listener: JobCompletionNotificationListener, step1: Step): Job {
-        return jobBuilderFactory["importUserJob"]
+    fun importZonasJob(listener: JobCompletionNotificationListener, cargarZonas: Step): Job {
+        return jobBuilderFactory["Job Importación Zonas"]
             .incrementer(RunIdIncrementer())
             .listener(listener)
-            .flow(step1)
+            .flow(cargarZonas)
             .end()
             .build()
     }
 
     @Bean
-    fun step1(reader: FlatFileItemReader<Zona>, writer: JdbcBatchItemWriter<Zona>): Step {
-        return stepBuilderFactory["step1"]
+    // fun cargarZonas(reader: FlatFileItemReader<Zona>, writer: JdbcBatchItemWriter<Zona>): Step {
+    fun cargarZonas(reader: FlatFileItemReader<Zona>, writer: RepositoryItemWriter<Zona>): Step {
+        return stepBuilderFactory["Cargar Zonas"]
             .chunk<Zona, Zona>(10)
             .reader(reader)
             .processor(processor())
