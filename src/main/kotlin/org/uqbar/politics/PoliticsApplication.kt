@@ -23,18 +23,19 @@ fun main(args: Array<String>) {
     runApplication<PoliticsApplication>(*args)
 }
 
-@Component
-@EnableScheduling
-internal class ScheduledTasks {
-    @Autowired
-    lateinit var jobLauncher: JobLauncher
-
-    @Autowired
-    lateinit var job: Job
-
-    @Scheduled(fixedDelay = 10000, initialDelay = 10000)
-    @Throws(Exception::class)
-    fun runJob() {
-        jobLauncher.run(job, JobParameters(hashMapOf(Pair("file.input", JobParameter("./zonas.csv")), Pair("time", JobParameter(System.currentTimeMillis())))))
-    }
-}
+//@Component
+//@EnableScheduling
+//internal class ScheduledTasks {
+//    @Autowired
+//    lateinit var jobLauncher: JobLauncher
+//
+//    @Autowired
+//    lateinit var job: Job
+//
+//    Esto permite definir un scheduler que ejecute el job cada 10 segundos
+//    @Scheduled(fixedDelay = 10000, initialDelay = 10000)
+//    @Throws(Exception::class)
+//    fun runJob() {
+//        jobLauncher.run(job, JobParameters(hashMapOf(Pair("file.input", JobParameter("./zonas.csv")), Pair("time", JobParameter(System.currentTimeMillis())))))
+//    }
+//}
