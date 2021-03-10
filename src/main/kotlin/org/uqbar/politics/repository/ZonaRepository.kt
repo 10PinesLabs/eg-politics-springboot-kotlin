@@ -11,4 +11,5 @@ interface ZonaRepository : CrudRepository<Zona, Long> {
     @EntityGraph(attributePaths=["candidates.promesas", "candidates.partido", "candidates.opiniones"])
     override fun findById(id: Long): Optional<Zona>
 
+    fun findAllByOrderByDescripcionAsc(): List<Zona>
 }

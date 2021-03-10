@@ -81,7 +81,6 @@ class BatchConfiguration {
     }
 
     @Bean
-    // fun cargarZonas(reader: FlatFileItemReader<Zona>, writer: JdbcBatchItemWriter<Zona>): Step {
     fun cargarZonas(reader: FlatFileItemReader<Zona>, writer: RepositoryItemWriter<Zona>): Step {
         return stepBuilderFactory["Cargar Zonas"]
             .chunk<Zona, Zona>(10)
