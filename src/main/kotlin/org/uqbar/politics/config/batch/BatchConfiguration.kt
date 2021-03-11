@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.ClassPathResource
+import org.springframework.core.io.PathResource
 import org.uqbar.politics.domain.Zona
 import org.uqbar.politics.repository.ZonaRepository
 import javax.sql.DataSource
@@ -42,7 +43,7 @@ class BatchConfiguration {
     @Bean
     fun zonasReader(@Value("#{jobParameters['file.input']}") fileInput: String): FlatFileItemReader<Zona> {
         return FlatFileItemReaderBuilder<Zona>().name("zonasItemReader")
-            .resource(ClassPathResource(fileInput))
+            .resource(PathResource(fileInput))
             .delimited()
             .names("descripcion")
             .fieldSetMapper(object : BeanWrapperFieldSetMapper<Zona>() {
