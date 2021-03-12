@@ -50,13 +50,11 @@ class SpringBatchIntegrationTest {
     @Test
     @Throws(Exception::class)
     fun givenReferenceOutput_whenJobExecuted_thenSuccess() {
-        // when
         val jobExecution: JobExecution = jobLauncherTestUtils!!.launchJob(defaultJobParameters())
-        val actualJobInstance: JobInstance = jobExecution.getJobInstance()
-        val actualJobExitStatus: ExitStatus = jobExecution.getExitStatus()
+        val actualJobInstance: JobInstance = jobExecution.jobInstance
+        val actualJobExitStatus: ExitStatus = jobExecution.exitStatus
 
-        // then
-        assertEquals("Job Importación Zonas", actualJobInstance.getJobName())
+        assertEquals("Job Importación Zonas", actualJobInstance.jobName)
         assertEquals("COMPLETED", actualJobExitStatus.exitCode)
 
         val nombresDeZonasEsperadas = listOf("LOMA HERMOSA", "SAN MARTIN", "VILLA BALLESTER", "VILLA DEL PARQUE")
