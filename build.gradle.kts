@@ -47,22 +47,22 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-tasks.test {
-    finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
-}
-
-tasks.jacocoTestReport {
-    dependsOn(tasks.test) // tests are required to run before generating the report
-}
-
-jacoco {
-    toolVersion = "0.8.5"
-}
-
-tasks.jacocoTestReport {
-    reports {
-        xml.isEnabled = true
-        csv.isEnabled = false
-        html.isEnabled = false
-    }
-}
+//tasks.test {
+//    finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
+//}
+//
+//tasks.jacocoTestReport {
+//    dependsOn(tasks.test) // tests are required to run before generating the report
+//}
+//
+//jacoco {
+//    toolVersion = "0.8.5"
+//}
+//
+//tasks.jacocoTestReport {
+//    reports {
+//        xml.isEnabled = true
+//        csv.isEnabled = false
+//        html.isEnabled = false
+//    }
+//}
