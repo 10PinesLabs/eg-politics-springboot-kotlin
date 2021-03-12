@@ -25,7 +25,7 @@ import org.uqbar.politics.repository.ZonaRepository
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class SpringBatchIntegrationTest {
 
-    private val TEST_INPUT = "./zonas.csv"
+    private val TEST_INPUT = "./src/main/resources/zonas.csv"
 
     @Autowired
     private val zonaRepository: ZonaRepository? = null
