@@ -1,9 +1,11 @@
+server:
+  port: 8091
 spring:
   #   base de datos posta
   datasource:
-    url: jdbc:mysql://localhost/politics
+    url: jdbc:mysql://localhost:3307/politics
     username: root
-    password:
+    password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
