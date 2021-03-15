@@ -1,7 +1,8 @@
 politics-db:
-  image: mysql:latest
+  image: postgres:latest
   ports:
-    - 3307:3306
+    - 3307:5432
   environment:
-    MYSQL_DATABASE: "politics"
-    MYSQL_ROOT_PASSWORD: "password"
+    POSTGRES_DB: "politics"
+    POSTGRES_USER: "root"
+    POSTGRES_PASSWORD: "password"
