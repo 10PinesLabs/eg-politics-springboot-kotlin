@@ -61,9 +61,10 @@ class ZonaController {
 
     @PostMapping("/zonas")
     fun cargarZonas(@RequestParam("file") file: MultipartFile) {
-        val tempFile = File("src/main/resources/zonasTemp.csv") // esto es re condicionderaceable
+        val tempFile = File.createTempFile("zonas", ".csv", File("src/main/resources/"))
         FileOutputStream(tempFile).use { os -> os.write(file.bytes) }
-        jobLauncher.run(job, JobParameters(hashMapOf(Pair("file.input", JobParameter("src/main/resources/zonasTemp.csv")), Pair("time", JobParameter(System.currentTimeMillis())))))
+        jobLauncher.run(job, JobParameters(hashMapOf(Pair("file.input", JobParameter(tempFile.path)), Pair("time", JobParameter(System.currentTimeMillis())))))
+        tempFile.delete()
     }
 
     companion object {
