@@ -9,9 +9,6 @@ import org.springframework.batch.core.configuration.annotation.StepScope
 import org.springframework.batch.core.launch.support.RunIdIncrementer
 import org.springframework.batch.item.data.RepositoryItemWriter
 import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder
-import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider
-import org.springframework.batch.item.database.JdbcBatchItemWriter
-import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder
 import org.springframework.batch.item.file.FlatFileItemReader
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper
@@ -19,11 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.io.ClassPathResource
 import org.springframework.core.io.PathResource
 import org.uqbar.politics.domain.Zona
 import org.uqbar.politics.repository.ZonaRepository
-import javax.sql.DataSource
 
 
 @Configuration
@@ -31,10 +26,10 @@ import javax.sql.DataSource
 class BatchConfiguration {
 
     @Autowired
-    lateinit var jobBuilderFactory: JobBuilderFactory;
+    lateinit var jobBuilderFactory: JobBuilderFactory
 
     @Autowired
-    lateinit var stepBuilderFactory: StepBuilderFactory;
+    lateinit var stepBuilderFactory: StepBuilderFactory
 
     @Autowired
     lateinit var zonaRepository: ZonaRepository

@@ -8,16 +8,17 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.springframework.batch.core.ExitStatus
 import org.springframework.batch.core.explore.JobExplorer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.mock.web.MockMultipartFile
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.transaction.support.TransactionTemplate
 import org.uqbar.politics.domain.Zona
 import org.uqbar.politics.repository.ZonaRepository
 
@@ -40,6 +41,9 @@ class ZonaControllerTest {
     @Autowired
     lateinit var jobExplorer: JobExplorer
 
+    @Autowired
+    lateinit var transactionTemplate: TransactionTemplate
+
     @Test
     @DisplayName("las zonas solo traen los datos de primer nivel")
     fun todasLasZonas() {
@@ -50,25 +54,18 @@ class ZonaControllerTest {
         // los zonas no traen candidatos
         assertThat(zonas.first().candidates, IsEmptyCollection())
     }
-/*
-    TODO: el test anda, pero LOMA HERMOSA y SAN MARTIN quedan en el repo de zonas y afectan a otros tests, fixear
+
     @Test
     @DisplayName("al mandarle un csv a /zonas, se crean las zonas del csv")
+    @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
     fun crearZonas() {
         val zonasCsv = MockMultipartFile("file", "zonas.csv", "text/plain", "LOMA HERMOSA\nSAN MARTIN".toByteArray())
         mockMvc.perform(MockMvcRequestBuilders.multipart("/zonas").file(zonasCsv)).andExpect(status().`is`(200))
-        val actualJobInstance = jobExplorer.getLastJobInstance("Job Importación Zonas")
-        val actualJobExecution = jobExplorer.getLastJobExecution(actualJobInstance!!)
-        val actualJobExitStatus: ExitStatus = actualJobExecution!!.exitStatus
-
-        assertEquals("Job Importación Zonas", actualJobInstance.jobName)
-        assertEquals("COMPLETED", actualJobExitStatus.exitCode)
-
         val nombresDeZonasEsperadas = listOf("LOMA HERMOSA", "SAN MARTIN")
         val nombresDeZonasActuales = repoZonas.findAllByOrderByDescripcionAsc().map { it.descripcion }
         assertTrue(nombresDeZonasActuales.containsAll(nombresDeZonasEsperadas))
     }
-*/
+
     @Test
     @DisplayName("al traer el dato de una zona trae las personas candidatas también")
     fun zonaConCandidates() {

@@ -14,7 +14,7 @@ spring:
 
   jpa:
     open-in-view: false
-    show-sql: true
+    show-sql: false
     hibernate:
       #            use-new-id-generator-mappings: false
       format_sql: true
