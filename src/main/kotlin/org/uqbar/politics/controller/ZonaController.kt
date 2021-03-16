@@ -3,9 +3,10 @@ package org.uqbar.politics.controller
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.module.SimpleModule
 import io.swagger.annotations.ApiOperation
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.JobParameter
 import org.springframework.batch.core.JobParameters
@@ -21,16 +22,11 @@ import org.uqbar.politics.serializers.ZonaParaGrillaSerializer
 import org.uqbar.politics.serializers.ZonaPlanaDTO
 import java.io.File
 import java.io.FileOutputStream
-
-import java.io.OutputStream
-
-
-
+import org.apache.logging.log4j.kotlin.Logging
 
 @RestController
 @CrossOrigin(origins = ["*"], methods= [RequestMethod.GET, RequestMethod.POST])
-class ZonaController {
-
+class ZonaController: Logging {
     @Autowired
     private lateinit var zonaRepository: ZonaRepository
 
@@ -40,10 +36,12 @@ class ZonaController {
     @Autowired
     lateinit var job: Job
 
-
     @GetMapping("/zonas")
     @ApiOperation("Devuelve todas las zonas de votación")
-    fun getZonas(): List<ZonaPlanaDTO> = zonaRepository.findAll().map { zona -> ZonaPlanaDTO(zona.id!!, zona.descripcion) }
+    fun getZonas(): List<ZonaPlanaDTO> {
+        logger.info("Se hizo un GET a /zonas")
+        return zonaRepository.findAll().map { zona -> ZonaPlanaDTO(zona.id!!, zona.descripcion) }
+    }
 
     @GetMapping("/zonas/{id}")
     @ApiOperation("Muestra la información de una zona de votación con sus candidates")
