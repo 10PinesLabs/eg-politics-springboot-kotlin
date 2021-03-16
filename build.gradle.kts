@@ -3,12 +3,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.springframework.boot") version "2.4.2"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id("org.liquibase.gradle") version "2.0.3"
     kotlin("jvm") version "1.4.21"
     kotlin("plugin.spring") version "1.4.21"
     kotlin("plugin.jpa") version "1.4.21"
     jacoco
 }
-
 group = "org.uqbar"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_14
@@ -34,6 +34,11 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.batch:spring-batch-test")
+    liquibaseRuntime("org.liquibase:liquibase-core:3.8.1")
+    liquibaseRuntime("org.postgresql:postgresql")
+    liquibaseRuntime("javax.xml.bind:jaxb-api:2.3.1")
+    liquibaseRuntime("ch.qos.logback:logback-core:1.2.3")
+    liquibaseRuntime("ch.qos.logback:logback-classic:1.2.3")
 }
 
 tasks.withType<KotlinCompile> {
@@ -65,4 +70,20 @@ tasks.jacocoTestReport {
         csv.isEnabled = false
         html.isEnabled = false
     }
+}
+
+liquibase {
+    activities.register("main") {
+        this.arguments = mapOf(
+            "logLevel" to "info",
+            "changeLogFile" to "src/main/resources/db.changelog.xml",
+            "url" to "jdbc:postgresql://localhost:3307/politics",
+            "username" to "root",
+            "password" to "password")
+    }
+}
+
+tasks.register("dev") {
+    // depend on the liquibase status task
+    dependsOn("update")
 }
