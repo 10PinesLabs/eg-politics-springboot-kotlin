@@ -22,12 +22,11 @@ import org.uqbar.politics.serializers.ZonaParaGrillaSerializer
 import org.uqbar.politics.serializers.ZonaPlanaDTO
 import java.io.File
 import java.io.FileOutputStream
+import org.apache.logging.log4j.kotlin.Logging
 
 @RestController
 @CrossOrigin(origins = ["*"], methods= [RequestMethod.GET, RequestMethod.POST])
-class ZonaController {
-    var logger: Logger = LoggerFactory.getLogger(ZonaController::class.java)
-
+class ZonaController: Logging {
     @Autowired
     private lateinit var zonaRepository: ZonaRepository
 
