@@ -22,11 +22,13 @@ import org.uqbar.politics.serializers.ZonaParaGrillaSerializer
 import org.uqbar.politics.serializers.ZonaPlanaDTO
 import java.io.File
 import java.io.FileOutputStream
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.LogManager
 
 @RestController
 @CrossOrigin(origins = ["*"], methods= [RequestMethod.GET, RequestMethod.POST])
-class ZonaController: Logging {
+class ZonaController {
+    val log = LogManager.getLogger(ZonaController::class.java)
+
     @Autowired
     private lateinit var zonaRepository: ZonaRepository
 
@@ -39,8 +41,9 @@ class ZonaController: Logging {
     @GetMapping("/zonas")
     @ApiOperation("Devuelve todas las zonas de votación")
     fun getZonas(): List<ZonaPlanaDTO> {
-        logger.info("Se hizo un GET a /zonas")
-        return zonaRepository.findAll().map { zona -> ZonaPlanaDTO(zona.id!!, zona.descripcion) }
+        val zonas = zonaRepository.findAll().map { zona -> ZonaPlanaDTO(zona.id!!, zona.descripcion) }
+        log.info("Se hizo un GET a /zonas y trajo: $zonas")
+        return zonas
     }
 
     @GetMapping("/zonas/{id}")
