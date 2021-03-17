@@ -1,0 +1,40 @@
+Configuration:
+  status: error
+
+  Appenders:
+    Console:
+      - name: CUSTOM_LAYOUT_APPENDER
+        target: SYSTEM_OUT
+        CustomLayout: {}
+
+      - name: JSON_LAYOUT_APPENDER
+        target: SYSTEM_OUT
+        JSONLayout:
+          compact: true
+          complete: false
+          objectMessageAsJsonObject: true
+
+      - name: CONSOLE_ROOT
+        target: SYSTEM_OUT
+        PatternLayout:
+          alwaysWriteExceptions: true
+          pattern: "[%threadName] %-5level %logger{36} - %message{nolookups} %ex{separator(|)} %n"
+
+      - name: DataDog
+        target: HTTP
+
+  <Http name="DataDog" url="https://http-intake.logs.datadoghq.com/v1/input?host=${sys:hostName}&amp;ddsource=10Pines&amp;service=eg-politics-springboot-kotlin&amp;ddtags=env:Dev">
+  <Property name="Content-Type" value="application/json" />
+  <Property name="DD-API-KEY" value="${env:LOGS_API_KEY}" />
+
+Loggers:
+    logger:
+      - name: LOGGER_WITH_CUSTOM_LAYOUT
+        level: info
+        additivity: false
+        AppenderRef:
+          ref: CUSTOM_LAYOUT_APPENDER
+
+    Root:
+      AppenderRef:
+        ref: CONSOLE_ROOT

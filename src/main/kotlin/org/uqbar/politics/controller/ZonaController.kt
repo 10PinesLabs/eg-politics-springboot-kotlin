@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.module.SimpleModule
 import io.swagger.annotations.ApiOperation
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.JobParameter
 import org.springframework.batch.core.JobParameters
@@ -24,11 +22,12 @@ import java.io.File
 import java.io.FileOutputStream
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.ThreadContext
+import org.uqbar.politics.logging.MortgageMessage
 
 @RestController
 @CrossOrigin(origins = ["*"], methods= [RequestMethod.GET, RequestMethod.POST])
 class ZonaController {
-    val log = LogManager.getLogger(ZonaController::class.java)
+    val logger = LogManager.getLogger(LOGGER_WITH_CUSTOM_LAYOUT)
 
     @Autowired
     private lateinit var zonaRepository: ZonaRepository
@@ -43,8 +42,7 @@ class ZonaController {
     @ApiOperation("Devuelve todas las zonas de votación")
     fun getZonas(): List<ZonaPlanaDTO> {
         val zonas = zonaRepository.findAll().map { zona -> ZonaPlanaDTO(zona.id!!, zona.descripcion) }
-        ThreadContext.put("zona.descripcion", zonas.first().descripcion)
-        log.info("Se hizo un GET a /zonas")
+        logger.info(MortgageMessage(mapOf("id" to 1, "descripcion" to "Elecciones nacionales")))
         return zonas
     }
 
@@ -75,6 +73,7 @@ class ZonaController {
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
             .configure(SerializationFeature.INDENT_OUTPUT, true)
+        private val LOGGER_WITH_CUSTOM_LAYOUT = "LOGGER_WITH_CUSTOM_LAYOUT"
     }
 
 }
