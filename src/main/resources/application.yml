@@ -1,14 +1,25 @@
+server:
+  port: 8091
 spring:
   #   base de datos posta
   datasource:
-    url: jdbc:mysql://localhost/politics
+    url: jdbc:postgresql://localhost:3307/politics
     username: root
-    password:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: password
 
   jpa:
     open-in-view: false
     show-sql: true
     hibernate:
       format_sql: true
-      ddl-auto: create-drop
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      ddl-auto: update
+
+  batch:
+    job:
+      enabled: false
+    initialize-schema: ALWAYS
+
+file:
+  input: zonas.csv
+

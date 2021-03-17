@@ -11,17 +11,13 @@ import kotlin.collections.*
 // Y finalmente podemos construir nuestras sealed classes con DTOs
 @JsonSerialize(using=ZonaParaGrillaSerializer::class)
 @Entity
-class Zona {
-
+class Zona(@Column(length=150) var descripcion: String = "") {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
-    @Column(length=150)
-    lateinit var descripcion: String
-
     @OneToMany(fetch=FetchType.LAZY)
-    lateinit var candidates: MutableSet<Candidate>
+    var candidates: MutableSet<Candidate> = mutableSetOf()
 
     fun validar() {
         if (descripcion.trim() == "") {
@@ -33,5 +29,4 @@ class Zona {
     }
 
     override fun toString(): String = descripcion
-
 }

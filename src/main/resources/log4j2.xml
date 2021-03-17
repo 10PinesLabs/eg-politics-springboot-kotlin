@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable" />
+        </Console>
+
+        <RollingFile name="RollingFile"
+                     fileName="./logs/spring-boot-logger-log4j2.log"
+                     filePattern="./logs/$${date:yyyy-MM}/spring-boot-logger-log4j2-%d{-dd-MMMM-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- rollover on startup, daily and when the file reaches
+                    10 MegaBytes -->
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy
+                        size="10 MB" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+
+        <Http name="DataDog" url="https://http-intake.logs.datadoghq.com/v1/input?host=${sys:hostName}&amp;ddsource=10Pines&amp;service=eg-politics-springboot-kotlin&amp;ddtags=env:Dev">
+            <Property name="Content-Type" value="application/json" />
+            <Property name="DD-API-KEY" value="${env:LOGS_API_KEY}" />
+            <PatternLayout pattern="%-5p %d [%t] [event: %X{correlationId}] %c: %m%n" />
+        </Http>
+    </Appenders>
+
+    <Loggers>
+        <!-- LOG everything at INFO level -->
+        <AsyncRoot level="info">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="RollingFile" />
+            <AppenderRef ref="DataDog" />
+        </AsyncRoot>
+
+        <!-- LOG "com.10pines*" at TRACE level -->
+        <Logger name="com.10pines" level="trace"/>
+    </Loggers>
+
+</Configuration>

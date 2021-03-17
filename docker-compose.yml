@@ -1,0 +1,8 @@
+politics-db:
+  image: postgres:latest
+  ports:
+    - 3307:5432
+  environment:
+    POSTGRES_DB: "politics"
+    POSTGRES_USER: "root"
+    POSTGRES_PASSWORD: "password"
