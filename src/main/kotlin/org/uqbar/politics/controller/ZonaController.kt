@@ -23,6 +23,7 @@ import org.uqbar.politics.serializers.ZonaPlanaDTO
 import java.io.File
 import java.io.FileOutputStream
 import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.ThreadContext
 
 @RestController
 @CrossOrigin(origins = ["*"], methods= [RequestMethod.GET, RequestMethod.POST])
@@ -42,7 +43,8 @@ class ZonaController {
     @ApiOperation("Devuelve todas las zonas de votación")
     fun getZonas(): List<ZonaPlanaDTO> {
         val zonas = zonaRepository.findAll().map { zona -> ZonaPlanaDTO(zona.id!!, zona.descripcion) }
-        log.info("Se hizo un GET a /zonas y trajo: $zonas")
+        ThreadContext.put("zona.descripcion", zonas.first().descripcion)
+        log.info("Se hizo un GET a /zonas")
         return zonas
     }
 
