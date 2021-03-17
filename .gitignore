@@ -39,3 +39,6 @@ out/
 ### Log4j2 ###
 logs/
 *.log
+
+### MAC ###
+.DS_STORE

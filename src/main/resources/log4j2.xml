@@ -21,14 +21,21 @@
                 <TimeBasedTriggeringPolicy />
             </Policies>
         </RollingFile>
+
+        <Http name="DataDog" url="https://http-intake.logs.datadoghq.com/v1/input?host=${sys:hostName}&amp;ddsource=10Pines&amp;service=eg-politics-springboot-kotlin&amp;ddtags=env:Dev">
+            <Property name="Content-Type" value="application/json" />
+            <Property name="DD-API-KEY" value="${env:LOGS_API_KEY}" />
+            <PatternLayout pattern="%-5p %d [%t] [event: %X{correlationId}] %c: %m%n" />
+        </Http>
     </Appenders>
 
     <Loggers>
         <!-- LOG everything at INFO level -->
-        <Root level="info">
+        <AsyncRoot level="info">
             <AppenderRef ref="Console" />
             <AppenderRef ref="RollingFile" />
-        </Root>
+            <AppenderRef ref="DataDog" />
+        </AsyncRoot>
 
         <!-- LOG "com.10pines*" at TRACE level -->
         <Logger name="com.10pines" level="trace"/>
