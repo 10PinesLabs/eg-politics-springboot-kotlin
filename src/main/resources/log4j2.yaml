@@ -3,10 +3,6 @@ Configuration:
 
   Appenders:
     Console:
-      - name: CUSTOM_LAYOUT_APPENDER
-        target: SYSTEM_OUT
-        CustomLayout: {}
-
       - name: JSON_LAYOUT_APPENDER
         target: SYSTEM_OUT
         JSONLayout:
@@ -20,12 +16,15 @@ Configuration:
           alwaysWriteExceptions: true
           pattern: "[%threadName] %-5level %logger{36} - %message{nolookups} %ex{separator(|)} %n"
 
-      - name: DataDog
-        target: HTTP
-
-  <Http name="DataDog" url="https://http-intake.logs.datadoghq.com/v1/input?host=${sys:hostName}&amp;ddsource=10Pines&amp;service=eg-politics-springboot-kotlin&amp;ddtags=env:Dev">
-  <Property name="Content-Type" value="application/json" />
-  <Property name="DD-API-KEY" value="${env:LOGS_API_KEY}" />
+    Http:
+      name: DataDog
+      url: "https://http-intake.logs.datadoghq.com/v1/input?host=${sys:hostName}&amp;ddsource=10Pines&amp;service=eg-politics-springboot-kotlin&amp;ddtags=env:Dev"
+      Content-Type: "application/json"
+      DD-API-KEY: "${env:LOGS_API_KEY}"
+#
+#  <Http name="DataDog" url="https://http-intake.logs.datadoghq.com/v1/input?host=${sys:hostName}&amp;ddsource=10Pines&amp;service=eg-politics-springboot-kotlin&amp;ddtags=env:Dev">
+#  <Property name="Content-Type" value="application/json" />
+#  <Property name="DD-API-KEY" value="${env:LOGS_API_KEY}" />
 
 Loggers:
     logger:
@@ -33,8 +32,13 @@ Loggers:
         level: info
         additivity: false
         AppenderRef:
-          ref: CUSTOM_LAYOUT_APPENDER
+          - ref: CONSOLE_ROOT
+          - ref: JSON_LAYOUT_APPENDER
+          - ref: DataDog
 
-    Root:
-      AppenderRef:
-        ref: CONSOLE_ROOT
+#    AsyncRoot:
+#      Level: info
+#      AppenderRef:
+#        - ref: CONSOLE_ROOT
+#        - ref: JSON_LAYOUT_APPENDER
+#        - ref: DataDog

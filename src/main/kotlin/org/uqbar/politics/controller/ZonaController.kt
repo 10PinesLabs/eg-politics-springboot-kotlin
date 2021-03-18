@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.module.SimpleModule
 import io.swagger.annotations.ApiOperation
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.ThreadContext
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.JobParameter
 import org.springframework.batch.core.JobParameters
@@ -15,14 +17,12 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.server.ResponseStatusException
 import org.uqbar.politics.domain.Zona
+import org.uqbar.politics.logging.MortgageMessage
 import org.uqbar.politics.repository.ZonaRepository
 import org.uqbar.politics.serializers.ZonaParaGrillaSerializer
 import org.uqbar.politics.serializers.ZonaPlanaDTO
 import java.io.File
 import java.io.FileOutputStream
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.ThreadContext
-import org.uqbar.politics.logging.MortgageMessage
 
 @RestController
 @CrossOrigin(origins = ["*"], methods= [RequestMethod.GET, RequestMethod.POST])
@@ -43,6 +43,9 @@ class ZonaController {
     fun getZonas(): List<ZonaPlanaDTO> {
         val zonas = zonaRepository.findAll().map { zona -> ZonaPlanaDTO(zona.id!!, zona.descripcion) }
         logger.info(MortgageMessage(mapOf("id" to 1, "descripcion" to "Elecciones nacionales")))
+        logger.info("No cambia nada", mapOf(
+         "diego" to "peccia", "juan" to "fds"
+        ))
         return zonas
     }
 

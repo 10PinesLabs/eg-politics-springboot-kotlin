@@ -20,6 +20,5 @@ spring:
       enabled: false
     initialize-schema: ALWAYS
 
-file:
-  input: zonas.csv
-
+logging:
+  config: "classpath:log4j2.xml"
